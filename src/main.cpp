@@ -1,12 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       main.cpp                                                  */
-/*    Author:       lilrollieguy                                              */
-/*    Created:      10/3/2026, 12:57:25 PM                                    */
-/*    Description:  V5 project                                                */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
-
 #include "vex.h"
 
 using namespace vex;
@@ -14,7 +5,40 @@ using namespace vex;
 // A global instance of competition
 competition Competition;
 
-// define your global instances of motors and other devices here
+// Devices
+
+// Sensors
+inertial InertialSensor = inertial(PORT10, right);
+
+// Motors
+
+// Drivetrain motors
+motor LeftFrontMotor = motor(PORT1);
+motor LeftMiddleMotor = motor(PORT2);
+motor LeftBackMotor = motor(PORT3);
+motor RightFrontMotor = motor(PORT4);
+motor RightMiddleMotor = motor(PORT5);
+motor RightBackMotor = motor(PORT6);
+
+// Motor Groups
+motor_group LeftDrive = motor_group(
+    LeftFrontMotor,
+    LeftMiddleMotor,
+    LeftBackMotor
+);
+motor_group RightDrive = motor_group(
+    RightFrontMotor,
+    RightMiddleMotor,
+    RightBackMotor
+);
+
+// Smartdrive
+smartdrive FredDrivetrain = smartdrive (
+    LeftDrive,
+    RightDrive,
+    InertialSensor,
+    //finish
+);
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
