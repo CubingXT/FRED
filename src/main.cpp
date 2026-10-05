@@ -7,37 +7,68 @@ competition Competition;
 
 // Devices
 
+// Controller
+controller Controller = controller();
+
 // Sensors
-inertial InertialSensor = inertial(PORT10, right);
+inertial inertialSensor = inertial(PORT10, right);
 
 // Motors
 
 // Drivetrain motors
-motor LeftFrontMotor = motor(PORT1);
-motor LeftMiddleMotor = motor(PORT2);
-motor LeftBackMotor = motor(PORT3);
-motor RightFrontMotor = motor(PORT4);
-motor RightMiddleMotor = motor(PORT5);
-motor RightBackMotor = motor(PORT6);
+motor leftFrontMotor = motor(
+    PORT1,
+    ratio6_1,
+    false
+);
+motor leftMiddleMotor = motor(
+    PORT2,
+    ratio6_1,
+    false
+);
+motor leftBackMotor = motor(
+    PORT3,
+    ratio18_1,
+    false
+);
+motor rightFrontMotor = motor(
+    PORT4,
+    ratio6_1,
+    false
+);
+motor rightMiddleMotor = motor(
+    PORT5,
+    ratio6_1,
+    false
+);
+motor rightBackMotor = motor(
+    PORT6,
+    ratio18_1,
+    false
+);
 
 // Motor Groups
-motor_group LeftDrive = motor_group(
-    LeftFrontMotor,
-    LeftMiddleMotor,
-    LeftBackMotor
+motor_group leftDrive = motor_group(
+    leftFrontMotor,
+    leftMiddleMotor,
+    leftBackMotor
 );
 motor_group RightDrive = motor_group(
-    RightFrontMotor,
-    RightMiddleMotor,
-    RightBackMotor
+    rightFrontMotor,
+    rightMiddleMotor,
+    rightBackMotor
 );
 
 // Smartdrive
-smartdrive FredDrivetrain = smartdrive (
-    LeftDrive,
+smartdrive smartDrivetrain = smartdrive (
+    leftDrive,
     RightDrive,
-    InertialSensor,
-    //finish
+    inertialSensor,
+    260,
+    431.8, // verify
+    292.1,
+    mm,
+    1.0
 );
 
 /*---------------------------------------------------------------------------*/
@@ -52,8 +83,14 @@ smartdrive FredDrivetrain = smartdrive (
 
 void pre_auton(void) {
 
-  // All activities that occur before the competition starts
-  // Example: clearing encoders, setting servo positions, ...
+    // Callibrate sensors
+    inertialSensor.calibrate();
+    while(inertialSensor.isCalibrating()) {
+        wait(20, msec);
+    }
+    inertialSensor.resetHeading();
+    inertialSensor.resetRotation();
+    return;
 }
 
 /*---------------------------------------------------------------------------*/
