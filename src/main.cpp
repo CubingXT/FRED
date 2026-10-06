@@ -53,7 +53,7 @@ motor_group leftDrive = motor_group(
     leftMiddleMotor,
     leftBackMotor
 );
-motor_group RightDrive = motor_group(
+motor_group rightDrive = motor_group(
     rightFrontMotor,
     rightMiddleMotor,
     rightBackMotor
@@ -62,7 +62,7 @@ motor_group RightDrive = motor_group(
 // Smartdrive
 smartdrive smartDrivetrain = smartdrive (
     leftDrive,
-    RightDrive,
+    rightDrive,
     inertialSensor,
     260,
     431.8, // verify
@@ -120,17 +120,14 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
+  leftDrive.setVelocity(0, percent);
+  rightDrive.setVelocity(0, percent);
   // User control code here, inside the loop
   while (1) {
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
-
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
-
+    leftDrive.spin(forward);
+    rightDrive.spin(forward);
+    leftDrive.setVelocity(Controller.Axis3.position(), percent);
+    rightDrive.setVelocity(Controller.Axis2.position(), percent);
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
