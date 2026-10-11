@@ -21,41 +21,29 @@ motor leftFrontMotor = motor(
     ratio6_1,
     false
 );
-motor leftMiddleMotor = motor(
+motor leftBackMotor = motor(
     PORT2,
     ratio6_1,
     false
 );
-motor leftBackMotor = motor(
-    PORT3,
-    ratio18_1,
-    false
-);
 motor rightFrontMotor = motor(
-    PORT4,
+    PORT3,
     ratio6_1,
-    false
-);
-motor rightMiddleMotor = motor(
-    PORT5,
-    ratio6_1,
-    false
+    true
 );
 motor rightBackMotor = motor(
-    PORT6,
-    ratio18_1,
-    false
+    PORT4,
+    ratio6_1,
+    true
 );
 
 // Motor Groups
 motor_group leftDrive = motor_group(
     leftFrontMotor,
-    leftMiddleMotor,
     leftBackMotor
 );
 motor_group rightDrive = motor_group(
     rightFrontMotor,
-    rightMiddleMotor,
     rightBackMotor
 );
 
@@ -65,8 +53,8 @@ smartdrive smartDrivetrain = smartdrive (
     rightDrive,
     inertialSensor,
     260,
-    431.8, // verify
-    292.1,
+    429, // verify
+    305,
     mm,
     1.0
 );
