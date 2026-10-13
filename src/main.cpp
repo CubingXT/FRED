@@ -32,7 +32,7 @@ motor rightFrontMotor = motor(
     true
 );
 motor rightBackMotor = motor(
-    PORT4,
+    PORT5,
     ratio6_1,
     true
 );
