@@ -1,12 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       main.cpp                                                  */
-/*    Author:       lilrollieguy                                              */
-/*    Created:      10/3/2026, 12:57:25 PM                                    */
-/*    Description:  V5 project                                                */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
-
 #include "vex.h"
 
 using namespace vex;
@@ -14,7 +5,71 @@ using namespace vex;
 // A global instance of competition
 competition Competition;
 
-// define your global instances of motors and other devices here
+// Global variables
+int gear;
+
+// Devices
+
+// Controller
+controller Controller = controller();
+
+// Sensors
+inertial inertialSensor = inertial(PORT10, right);
+
+// Motors
+
+// Drivetrain motors
+motor leftFrontMotor = motor (
+    PORT1,
+    ratio6_1,
+    false
+);
+motor leftBackMotor = motor (
+    PORT8,
+    ratio6_1,
+    false
+);
+motor rightFrontMotor = motor (
+    PORT3,
+    ratio6_1,
+    true
+);
+motor rightBackMotor = motor (
+    PORT5,
+    ratio6_1,
+    true
+);
+
+// Motor Groups
+motor_group leftDrive = motor_group (
+    leftFrontMotor,
+    leftBackMotor
+);
+motor_group rightDrive = motor_group (
+    rightFrontMotor,
+    rightBackMotor
+);
+
+// Smartdrive
+smartdrive smartDrivetrain = smartdrive (
+    leftDrive,
+    rightDrive,
+    inertialSensor,
+    260,
+    429, // verify
+    305,
+    mm,
+    1.0
+);
+
+// Artificial gearshift
+void gearDown() {
+    gear = 3;
+}
+
+void gearUp() {
+    gear = 1.5;
+}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -28,8 +83,17 @@ competition Competition;
 
 void pre_auton(void) {
 
-  // All activities that occur before the competition starts
-  // Example: clearing encoders, setting servo positions, ...
+    // Set gear
+    gear = 2;
+
+    // Callibrate sensors
+    inertialSensor.calibrate();
+    while (inertialSensor.isCalibrating()) {
+        wait(20, msec);
+    }
+    inertialSensor.resetHeading();
+    inertialSensor.resetRotation();
+    return;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -43,9 +107,9 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-  // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
+    // ..........................................................................
+    // Insert autonomous user code here.
+    // ..........................................................................
 }
 
 /*---------------------------------------------------------------------------*/
@@ -59,35 +123,39 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-  // User control code here, inside the loop
-  while (1) {
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
+    gear = 3;
+    leftDrive.setVelocity(0, percent);
+    rightDrive.setVelocity(0, percent);
+    // User control code here, inside the loop
+    while (1) {
 
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
+        // Movement
+        leftDrive.spin(forward);
+        rightDrive.spin(forward);
+        leftDrive.setVelocity(Controller.Axis3.position() / gear, percent);
+        rightDrive.setVelocity(Controller.Axis2.position() / gear, percent);
 
-    wait(20, msec); // Sleep the task for a short amount of time to
-                    // prevent wasted resources.
-  }
+        // Artificial gearshift
+        Controller.ButtonDown.pressed(gearDown);
+        Controller.ButtonUp.pressed(gearUp);
+        wait(20, msec); // Sleep the task for a short amount of time to
+                        // prevent wasted resources.
+    }
 }
 
 //
 // Main will set up the competition functions and callbacks.
 //
 int main() {
-  // Set up callbacks for autonomous and driver control periods.
-  Competition.autonomous(autonomous);
-  Competition.drivercontrol(usercontrol);
+    // Set up callbacks for autonomous and driver control periods.
+    Competition.autonomous(autonomous);
+    Competition.drivercontrol(usercontrol);
 
-  // Run the pre-autonomous function.
-  pre_auton();
+    // Run the pre-autonomous function.
+    pre_auton();
 
-  // Prevent main from exiting with an infinite loop.
-  while (true) {
-    wait(100, msec);
-  }
+    // Prevent main from exiting with an infinite loop.
+    while (true) {
+        wait(100, msec);
+    }
 }
