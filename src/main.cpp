@@ -64,21 +64,11 @@ smartdrive smartDrivetrain = smartdrive (
 
 // Artificial gearshift
 void gearDown() {
-    if (gear == 1) {
-        gear = 2;
-    } else if (gear == 2) {
-        gear = 10;
-    }
-    return;
+    gear = 3;
 }
 
 void gearUp() {
-    if (gear == 10) {
-        gear = 2;
-    } else if (gear == 2) {
-        gear = 1;
-    }
-    return;
+    gear = 1.5;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -133,7 +123,7 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-    gear = 2;
+    gear = 3;
     leftDrive.setVelocity(0, percent);
     rightDrive.setVelocity(0, percent);
     // User control code here, inside the loop
