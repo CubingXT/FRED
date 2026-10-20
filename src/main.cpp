@@ -132,8 +132,8 @@ void usercontrol(void) {
         // Movement
         leftDrive.spin(forward);
         rightDrive.spin(forward);
-        leftDrive.setVelocity(Controller.Axis3.position() / gear, percent);
-        rightDrive.setVelocity(Controller.Axis2.position() / gear, percent);
+        leftDrive.setVelocity(Controller.Axis2.position() / gear * -1, percent);
+        rightDrive.setVelocity(Controller.Axis3.position() / gear * -1, percent);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
