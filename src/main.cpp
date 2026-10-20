@@ -22,22 +22,22 @@ inertial inertialSensor = inertial(PORT10, right);
 motor leftFrontMotor = motor (
     PORT1,
     ratio6_1,
-    false
+    true
 );
 motor leftBackMotor = motor (
     PORT8,
     ratio6_1,
-    false
+    true
 );
 motor rightFrontMotor = motor (
     PORT3,
     ratio6_1,
-    true
+    false
 );
 motor rightBackMotor = motor (
     PORT5,
     ratio6_1,
-    true
+    false
 );
 
 // Motor Groups
