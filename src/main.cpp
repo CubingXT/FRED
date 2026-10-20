@@ -22,22 +22,22 @@ inertial inertialSensor = inertial(PORT10, right);
 motor leftFrontMotor = motor (
     PORT1,
     ratio6_1,
-    true
+    false
 );
 motor leftBackMotor = motor (
     PORT8,
     ratio6_1,
-    true
+    false
 );
 motor rightFrontMotor = motor (
     PORT3,
     ratio6_1,
-    false
+    true
 );
 motor rightBackMotor = motor (
     PORT5,
     ratio6_1,
-    false
+    true
 );
 
 // Motor Groups
@@ -132,8 +132,8 @@ void usercontrol(void) {
         // Movement
         leftDrive.spin(forward);
         rightDrive.spin(forward);
-        leftDrive.setVelocity(Controller.Axis3.position() / gear, percent);
-        rightDrive.setVelocity(Controller.Axis2.position() / gear, percent);
+        leftDrive.setVelocity(Controller.Axis2.position() / gear * -1, percent);
+        rightDrive.setVelocity(Controller.Axis3.position() / gear * -1, percent);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
