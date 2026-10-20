@@ -10,11 +10,17 @@ int gear;
 
 // Devices
 
+// Brain
+brain Brain = brain();
+
 // Controller
 controller Controller = controller();
 
 // Sensors
 inertial inertialSensor = inertial(PORT10, right);
+
+// Pneumatics
+pneumatics claw = pneumatics(Brain.ThreeWirePort.A);
 
 // Motors
 
@@ -63,13 +69,12 @@ smartdrive smartDrivetrain = smartdrive (
 );
 
 // Artificial gearshift
-void gearDown() {
-    gear = 3;
-}
+void gearDown() {gear = 3;}
+void gearUp() {gear = 1.5;}
 
-void gearUp() {
-    gear = 1.5;
-}
+// Claw
+void openClaw() {claw.open();}
+void closeClaw() {claw.close();}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -134,6 +139,10 @@ void usercontrol(void) {
         rightDrive.spin(forward);
         leftDrive.setVelocity(Controller.Axis2.position() / gear * -1, percent);
         rightDrive.setVelocity(Controller.Axis3.position() / gear * -1, percent);
+
+        // Claw
+        Controller.ButtonR2.pressed(openClaw);
+        Controller.ButtonR1.pressed(closeClaw);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
