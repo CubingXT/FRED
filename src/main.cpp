@@ -18,6 +18,7 @@ controller Controller = controller();
 
 // Sensors
 inertial inertialSensor = inertial(PORT10, right);
+bumper goalSensor = bumper(Brain.ThreeWirePort.B);
 
 // Pneumatics
 pneumatics claw = pneumatics(Brain.ThreeWirePort.A);
