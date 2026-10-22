@@ -70,12 +70,12 @@ smartdrive smartDrivetrain = smartdrive (
 );
 
 // Artificial gearshift
-void gearDown() {gear = 3;}
-void gearUp() {gear = 1.5;}
+void gearDown(){gear = 3;}
+void gearUp(){gear = 1.5;}
 
 // Claw
-void openClaw() {claw.open();}
-void closeClaw() {claw.close();}
+void openClaw(){claw.open();}
+void closeClaw(){claw.close();}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -94,9 +94,7 @@ void pre_auton(void) {
 
     // Callibrate sensors
     inertialSensor.calibrate();
-    while (inertialSensor.isCalibrating()) {
-        wait(20, msec);
-    }
+    while (inertialSensor.isCalibrating()){wait(20, msec);}
     inertialSensor.resetHeading();
     inertialSensor.resetRotation();
     return;
