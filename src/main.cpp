@@ -89,6 +89,9 @@ void closeClaw(){claw.close();}
 
 void pre_auton(void) {
 
+    // Set screen
+    Controller.Screen.clearScreen();
+
     // Set gear
     gear = 2;
 
@@ -141,11 +144,19 @@ void usercontrol(void) {
 
         // Claw
         Controller.ButtonR2.pressed(openClaw);
-        Controller.ButtonR1.pressed(closeClaw);
+        Controller.ButtonL2.pressed(closeClaw);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
         Controller.ButtonUp.pressed(gearUp);
+
+        // Detect goal
+        if (goalSensor.pressing() == 1) {
+            Controller.Screen.setCursor(1, 1);
+            Controller.Screen.print("ryfrygyrytyr");
+        } else {
+            Controller.Screen.clearScreen();
+        }
         wait(20, msec); // Sleep the task for a short amount of time to
                         // prevent wasted resources.
     }
