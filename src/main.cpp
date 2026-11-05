@@ -10,13 +10,32 @@ int gear;
 
 // Devices
 
+// Brain
+brain Brain = brain();
+
 // Controller
 controller Controller = controller();
 
 // Sensors
 inertial inertialSensor = inertial(PORT10, right);
+bumper goalSensor = bumper(Brain.ThreeWirePort.B);
+
+// Pneumatics
+pneumatics claw = pneumatics(Brain.ThreeWirePort.A);
 
 // Motors
+
+// Arm motors
+motor rightArmMotor1 = motor (
+    PORT14,
+    ratio36_1,
+    true
+);
+motor rightArmMotor2 = motor (
+    PORT11,
+    ratio36_1,
+    false
+);
 
 // Drivetrain motors
 motor leftFrontMotor = motor (
@@ -49,6 +68,10 @@ motor_group rightDrive = motor_group (
     rightFrontMotor,
     rightBackMotor
 );
+motor_group arm = motor_group(
+    rightArmMotor1,
+    rightArmMotor2
+);
 
 // Smartdrive
 smartdrive smartDrivetrain = smartdrive (
@@ -63,13 +86,12 @@ smartdrive smartDrivetrain = smartdrive (
 );
 
 // Artificial gearshift
-void gearDown() {
-    gear = 3;
-}
+void gearDown(){gear = 3;}
+void gearUp(){gear = 1.5;}
 
-void gearUp() {
-    gear = 1.5;
-}
+// Claw
+void openClaw(){claw.open();}
+void closeClaw(){claw.close();}
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -83,14 +105,15 @@ void gearUp() {
 
 void pre_auton(void) {
 
+    // Set screen
+    Controller.Screen.clearScreen();
+
     // Set gear
     gear = 2;
 
     // Callibrate sensors
     inertialSensor.calibrate();
-    while (inertialSensor.isCalibrating()) {
-        wait(20, msec);
-    }
+    while (inertialSensor.isCalibrating()){wait(20, msec);}
     inertialSensor.resetHeading();
     inertialSensor.resetRotation();
     return;
@@ -123,21 +146,43 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
+    auto armVelocity = 0;
     gear = 3;
     leftDrive.setVelocity(0, percent);
     rightDrive.setVelocity(0, percent);
+    arm.setVelocity(0, percent);
+    leftDrive.spin(forward);
+    rightDrive.spin(forward);
+    arm.spin(forward);
     // User control code here, inside the loop
     while (1) {
 
         // Movement
-        leftDrive.spin(forward);
-        rightDrive.spin(forward);
-        leftDrive.setVelocity(Controller.Axis2.position() / gear * -1, percent);
-        rightDrive.setVelocity(Controller.Axis3.position() / gear * -1, percent);
+        auto turn = Controller.Axis1.position();
+        auto forward = Controller.Axis2.position() * -1;
+
+        leftDrive.setVelocity((turn + forward) / gear, percent);
+        rightDrive.setVelocity((forward - turn) / gear, percent);
+
+        // Claw
+        Controller.ButtonR2.pressed(openClaw);
+        Controller.ButtonL2.pressed(closeClaw);
+
+        // Arm
+        if (Controller.ButtonL1.pressing()) {
+            armVelocity = -100;
+        } else if (Controller.ButtonR1.pressing()) {
+            armVelocity = 100;
+        } else {
+            armVelocity = 0;
+        }
+
+        arm.setVelocity(armVelocity, percent);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
         Controller.ButtonUp.pressed(gearUp);
+
         wait(20, msec); // Sleep the task for a short amount of time to
                         // prevent wasted resources.
     }
