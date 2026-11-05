@@ -158,8 +158,11 @@ void usercontrol(void) {
     while (1) {
 
         // Movement
-        leftDrive.setVelocity(Controller.Axis2.position() / gear * -1, percent);
-        rightDrive.setVelocity(Controller.Axis3.position() / gear * -1, percent);
+        auto turn = Controller.Axis1.position();
+        auto forward = Controller.Axis2.position();
+
+        leftDrive.setVelocity((turn + forward) / gear, percent);
+        rightDrive.setVelocity((turn * -1 + forward) / gear, percent);
 
         // Claw
         Controller.ButtonR2.pressed(openClaw);
@@ -183,7 +186,7 @@ void usercontrol(void) {
         // Detect goal
         if (goalSensor.pressing() == 1) {
             Controller.Screen.setCursor(1, 1);
-            Controller.Screen.print("ryfrygyrytyr");
+            Controller.Screen.print("Contact");
         } else {
             Controller.Screen.clearScreen();
         }
