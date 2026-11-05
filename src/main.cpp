@@ -25,6 +25,18 @@ pneumatics claw = pneumatics(Brain.ThreeWirePort.A);
 
 // Motors
 
+// Arm motors
+motor rightArmMotor1 = motor (
+    PORT14,
+    ratio36_1,
+    true
+);
+motor rightArmMotor2 = motor (
+    PORT11,
+    ratio36_1,
+    false
+);
+
 // Drivetrain motors
 motor leftFrontMotor = motor (
     PORT1,
@@ -55,6 +67,10 @@ motor_group leftDrive = motor_group (
 motor_group rightDrive = motor_group (
     rightFrontMotor,
     rightBackMotor
+);
+motor_group arm = motor_group(
+    rightArmMotor1,
+    rightArmMotor2
 );
 
 // Smartdrive
@@ -130,21 +146,35 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
+    auto armVelocity = 0;
     gear = 3;
     leftDrive.setVelocity(0, percent);
     rightDrive.setVelocity(0, percent);
+    arm.setVelocity(0, percent);
+    leftDrive.spin(forward);
+    rightDrive.spin(forward);
+    arm.spin(forward);
     // User control code here, inside the loop
     while (1) {
 
         // Movement
-        leftDrive.spin(forward);
-        rightDrive.spin(forward);
         leftDrive.setVelocity(Controller.Axis2.position() / gear * -1, percent);
         rightDrive.setVelocity(Controller.Axis3.position() / gear * -1, percent);
 
         // Claw
         Controller.ButtonR2.pressed(openClaw);
         Controller.ButtonL2.pressed(closeClaw);
+
+        // Arm
+        if (Controller.ButtonL1.pressing()) {
+            armVelocity = -100;
+        } else if (Controller.ButtonR1.pressing()) {
+            armVelocity = 100;
+        } else {
+            armVelocity = 0;
+        }
+
+        arm.setVelocity(armVelocity, percent);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
