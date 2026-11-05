@@ -183,13 +183,6 @@ void usercontrol(void) {
         Controller.ButtonDown.pressed(gearDown);
         Controller.ButtonUp.pressed(gearUp);
 
-        // Detect goal
-        if (goalSensor.pressing() == 1) {
-            Controller.Screen.setCursor(1, 1);
-            Controller.Screen.print("Contact");
-        } else {
-            Controller.Screen.clearScreen();
-        }
         wait(20, msec); // Sleep the task for a short amount of time to
                         // prevent wasted resources.
     }
