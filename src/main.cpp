@@ -8,8 +8,6 @@ competition Competition;
 // Global variables
 int gear;
 
-// Devices
-
 // Brain
 brain Brain = brain();
 
@@ -73,25 +71,25 @@ motor_group arm = motor_group(
     rightArmMotor2
 );
 
-// Smartdrive
-smartdrive smartDrivetrain = smartdrive (
-    leftDrive,
-    rightDrive,
-    inertialSensor,
-    260,
-    429, // verify
-    305,
-    mm,
-    1.0
-);
-
 // Artificial gearshift
-void gearDown(){gear = 3;}
-void gearUp(){gear = 1.5;}
+namespace gears{
+    constexpr double high = 1.0;
+    constexpr double med  = 1.5;
+    constexpr double low  = 3.0;
+    void gearDown(){
+        if(gear == low) Controller.rumble(".");
+        else if(gear == med) gear = low;
+        else gear = med;
+    }
 
-// Claw
-void openClaw(){claw.open();}
-void closeClaw(){claw.close();}
+    void gearUp(){
+        if(gear == high) Controller.rumble("..");
+        else if(gear == med) gear = high;
+        else gear = med;
+    }
+}
+
+
 
 /*---------------------------------------------------------------------------*/
 /*                          Pre-Autonomous Functions                         */
@@ -104,16 +102,9 @@ void closeClaw(){claw.close();}
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
-
-    // Set screen
-    Controller.Screen.clearScreen();
-
-    // Set gear
-    gear = 2;
-
-    // Callibrate sensors
+    // Callibrate sensor
     inertialSensor.calibrate();
-    while (inertialSensor.isCalibrating()){wait(20, msec);}
+    while (inertialSensor.isCalibrating()){this_thread::sleep_for(5);}
     inertialSensor.resetHeading();
     inertialSensor.resetRotation();
     return;
@@ -146,27 +137,27 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
-    auto armVelocity = 0;
-    gear = 3;
-    leftDrive.setVelocity(0, percent);
-    rightDrive.setVelocity(0, percent);
-    arm.setVelocity(0, percent);
+    double armVelocity = 0.0;
+    gear = gears::med;
     leftDrive.spin(forward);
     rightDrive.spin(forward);
     arm.spin(forward);
+    leftDrive.setVelocity(0, percent);
+    rightDrive.setVelocity(0, percent);
+    arm.setVelocity(0, percent);
     // User control code here, inside the loop
     while (1) {
 
         // Movement
-        auto turn = Controller.Axis1.position();
-        auto forward = Controller.Axis2.position();
+        double turn    = Controller.Axis1.position();
+        double forward = Controller.Axis2.position();
 
-        leftDrive.setVelocity((turn + forward) / gear, percent);
-        rightDrive.setVelocity((turn * -1 + forward) / gear, percent);
+        leftDrive.setVelocity ((forward + turn) / gear, percent);
+        rightDrive.setVelocity((forward - turn) / gear, percent);
 
         // Claw
-        Controller.ButtonR2.pressed(openClaw);
-        Controller.ButtonL2.pressed(closeClaw);
+        Controller.ButtonR2.pressed([](){claw.open();});
+        Controller.ButtonL2.pressed([](){claw.close();});
 
         // Arm
         if (Controller.ButtonL1.pressing()) {
@@ -180,18 +171,20 @@ void usercontrol(void) {
         arm.setVelocity(armVelocity, percent);
 
         // Artificial gearshift
-        Controller.ButtonDown.pressed(gearDown);
-        Controller.ButtonUp.pressed(gearUp);
+        Controller.ButtonDown.pressed(gears::gearDown);
+        Controller.ButtonUp.pressed(gears::gearUp);
 
         // Detect goal
-        if (goalSensor.pressing() == 1) {
+        goalSensor.pressed([](){
             Controller.Screen.setCursor(1, 1);
-            Controller.Screen.print("Contact");
-        } else {
+            Controller.Screen.print("Goal Pressed");
+        });
+
+        goalSensor.released([](){
             Controller.Screen.clearScreen();
-        }
-        wait(20, msec); // Sleep the task for a short amount of time to
-                        // prevent wasted resources.
+        });
+
+        this_thread::sleep_for(20);
     }
 }
 
@@ -207,7 +200,7 @@ int main() {
     pre_auton();
 
     // Prevent main from exiting with an infinite loop.
-    while (true) {
-        wait(100, msec);
+    while (1) {
+        this_thread::sleep_for(300);
     }
 }
