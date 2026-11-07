@@ -26,12 +26,12 @@ pneumatics claw = pneumatics(Brain.ThreeWirePort.A);
 // Motors
 
 // Arm motors
-motor rightArmMotor1 = motor (
+motor rightArm = motor (
     PORT14,
     ratio36_1,
     true
 );
-motor rightArmMotor2 = motor (
+motor leftArm = motor (
     PORT11,
     ratio36_1,
     false
@@ -58,6 +58,11 @@ motor rightBackMotor = motor (
     ratio6_1,
     true
 );
+motor toggle = motor (
+    PORT7,
+    ratio18_1,
+    false
+);
 
 // Motor Groups
 motor_group leftDrive = motor_group (
@@ -69,8 +74,8 @@ motor_group rightDrive = motor_group (
     rightBackMotor
 );
 motor_group arm = motor_group(
-    rightArmMotor1,
-    rightArmMotor2
+    rightArm,
+    leftArm
 );
 
 // Smartdrive
@@ -104,6 +109,9 @@ void closeClaw(){claw.close();}
 /*---------------------------------------------------------------------------*/
 
 void pre_auton(void) {
+    
+    // Set stopping mode
+    arm.setStopping(hold);
 
     // Set screen
     Controller.Screen.clearScreen();
@@ -130,9 +138,10 @@ void pre_auton(void) {
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
-    // ..........................................................................
-    // Insert autonomous user code here.
-    // ..........................................................................
+    // Toggling the air due to default being open for size purposes.
+    claw.close();
+    claw.open();
+    claw.close();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -150,9 +159,11 @@ void usercontrol(void) {
     gear = 3;
     leftDrive.setVelocity(0, percent);
     rightDrive.setVelocity(0, percent);
+    toggle.setVelocity(0, percent);
     arm.setVelocity(0, percent);
     leftDrive.spin(forward);
     rightDrive.spin(forward);
+    toggle.spin(forward);
     arm.spin(forward);
     // User control code here, inside the loop
     while (1) {
@@ -161,8 +172,8 @@ void usercontrol(void) {
         auto turn = Controller.Axis1.position();
         auto forward = Controller.Axis2.position() * -1;
 
-        leftDrive.setVelocity((turn + forward) / gear, percent);
-        rightDrive.setVelocity((forward - turn) / gear, percent);
+        leftDrive.setVelocity((turn - forward) / gear, percent);
+        rightDrive.setVelocity((-1 * forward - turn) / gear, percent);
 
         // Claw
         Controller.ButtonR2.pressed(openClaw);
@@ -178,6 +189,9 @@ void usercontrol(void) {
         }
 
         arm.setVelocity(armVelocity, percent);
+
+        // Toggle
+        toggle.setVelocity(Controller.Axis3.position(), percent);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
