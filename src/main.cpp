@@ -169,11 +169,8 @@ void usercontrol(void) {
     while (1) {
 
         // Movement
-        auto turn = Controller.Axis1.position();
-        auto forward = Controller.Axis2.position() * -1;
-
-        leftDrive.setVelocity((turn - forward) / gear, percent);
-        rightDrive.setVelocity((-1 * forward - turn) / gear, percent);
+        leftDrive.setVelocity(Controller.Axis3.position() / gear, percent);
+        rightDrive.setVelocity(Controller.Axis2.position() / gear, percent);
 
         // Claw
         Controller.ButtonR2.pressed(openClaw);
