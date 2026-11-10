@@ -32,7 +32,7 @@ motor rightArm = motor (
     true
 );
 motor leftArm = motor (
-    PORT11,
+    PORT16,
     ratio36_1,
     false
 );
@@ -178,9 +178,9 @@ void usercontrol(void) {
 
         // Arm
         if (Controller.ButtonL1.pressing()) {
-            armVelocity = -100;
+            armVelocity = -50;
         } else if (Controller.ButtonR1.pressing()) {
-            armVelocity = 100;
+            armVelocity = 50;
         } else {
             armVelocity = 0;
         }
