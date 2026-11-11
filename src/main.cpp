@@ -49,7 +49,7 @@ motor leftBackMotor = motor (
     false
 );
 motor rightFrontMotor = motor (
-    PORT3,
+    PORT7,
     ratio6_1,
     true
 );
@@ -57,11 +57,6 @@ motor rightBackMotor = motor (
     PORT5,
     ratio6_1,
     true
-);
-motor toggle = motor (
-    PORT7,
-    ratio18_1,
-    false
 );
 
 // Motor Groups
@@ -112,9 +107,8 @@ void pre_auton(void) {
     
     // Set stopping mode
     arm.setStopping(hold);
-
-    // Set screen
-    Controller.Screen.clearScreen();
+    rightDrive.setStopping(coast);
+    leftDrive.setStopping(coast);
 
     // Set gear
     gear = 2;
@@ -159,11 +153,9 @@ void usercontrol(void) {
     gear = 3;
     leftDrive.setVelocity(0, percent);
     rightDrive.setVelocity(0, percent);
-    toggle.setVelocity(0, percent);
     arm.setVelocity(0, percent);
     leftDrive.spin(forward);
     rightDrive.spin(forward);
-    toggle.spin(forward);
     arm.spin(forward);
     // User control code here, inside the loop
     while (1) {
@@ -186,9 +178,6 @@ void usercontrol(void) {
         }
 
         arm.setVelocity(armVelocity, percent);
-
-        // Toggle
-        toggle.setVelocity(Controller.Axis3.position(), percent);
 
         // Artificial gearshift
         Controller.ButtonDown.pressed(gearDown);
