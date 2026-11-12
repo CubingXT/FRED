@@ -1,5 +1,4 @@
 #include "main.h"
-#include "devices.hpp"
 
 pros::Controller master (pros::E_CONTROLLER_MASTER);
 
