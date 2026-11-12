@@ -1,6 +1,6 @@
 #include "main.h"
 
-double gear = 3;
+double gear = 1.5;
 
 void gearDown() {
 	gear = 3;
@@ -30,14 +30,23 @@ void autonomous() {}
 
 void opcontrol() {
 	while (true) {
+        // Drive
 		leftDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / gear);
 		rightDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y) / gear);
+
+        // Claw
 		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) closeClaw();
 		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) openClaw();
+
+        // Arm
 		master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) ? arm.move(-63) :
 		master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) ? arm.move(63) : arm.move(0);
+
+        // changeGear
 		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) gearDown();
 		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) gearUp();
+
 		pros::delay(20);
 	}
 }
+
