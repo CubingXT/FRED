@@ -1,206 +1,44 @@
-#include "vex.h"
+#include "main.h"
+#include "devices.hpp"
 
-using namespace vex;
+double gear;
 
-// A global instance of competition
-competition Competition;
-
-// Global variables
-int gear;
-
-// Devices
-
-// Brain
-brain Brain = brain();
-
-// Controller
-controller Controller = controller();
-
-// Sensors
-inertial inertialSensor = inertial(PORT10, right);
-bumper goalSensor = bumper(Brain.ThreeWirePort.B);
-
-// Pneumatics
-pneumatics claw = pneumatics(Brain.ThreeWirePort.A);
-
-// Motors
-
-// Arm motors
-motor rightArm = motor (
-    PORT14,
-    ratio36_1,
-    true
-);
-motor leftArm = motor (
-    PORT16,
-    ratio36_1,
-    false
-);
-
-// Drivetrain motors
-motor leftFrontMotor = motor (
-    PORT1,
-    ratio6_1,
-    false
-);
-motor leftBackMotor = motor (
-    PORT8,
-    ratio6_1,
-    false
-);
-motor rightFrontMotor = motor (
-    PORT7,
-    ratio6_1,
-    true
-);
-motor rightBackMotor = motor (
-    PORT5,
-    ratio6_1,
-    true
-);
-
-// Motor Groups
-motor_group leftDrive = motor_group (
-    leftFrontMotor,
-    leftBackMotor
-);
-motor_group rightDrive = motor_group (
-    rightFrontMotor,
-    rightBackMotor
-);
-motor_group arm = motor_group(
-    rightArm,
-    leftArm
-);
-
-// Smartdrive
-smartdrive smartDrivetrain = smartdrive (
-    leftDrive,
-    rightDrive,
-    inertialSensor,
-    260,
-    429, // verify
-    305,
-    mm,
-    1.0
-);
-
-// Artificial gearshift
-void gearDown(){gear = 3;}
-void gearUp(){gear = 1.5;}
-
-// Claw
-void openClaw(){claw.open();}
-void closeClaw(){claw.close();}
-
-/*---------------------------------------------------------------------------*/
-/*                          Pre-Autonomous Functions                         */
-/*                                                                           */
-/*  You may want to perform some actions before the competition starts.      */
-/*  Do them in the following function.  You must return from this function   */
-/*  or the autonomous and usercontrol tasks will not be started.  This       */
-/*  function is only called once after the V5 has been powered on and        */
-/*  not every time that the robot is disabled.                               */
-/*---------------------------------------------------------------------------*/
-
-void pre_auton(void) {
-    
-    // Set stopping mode
-    arm.setStopping(hold);
-    rightDrive.setStopping(coast);
-    leftDrive.setStopping(coast);
-
-    // Set gear
-    gear = 2;
-
-    // Callibrate sensors
-    inertialSensor.calibrate();
-    while (inertialSensor.isCalibrating()){wait(20, msec);}
-    inertialSensor.resetHeading();
-    inertialSensor.resetRotation();
-    return;
+void gearDown() {
+	gear = 3;
+	drivetrain.set_current_limit_all(1500);
+}
+void gearUp() {
+	gear = 1.5;
+	drivetrain.set_current_limit_all(2500);
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*                              Autonomous Task                              */
-/*                                                                           */
-/*  This task is used to control your robot during the autonomous phase of   */
-/*  a VEX Competition.                                                       */
-/*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*/
+void openClaw(){claw.set_value(true);}
+void closeClaw(){claw.set_value(false);}
 
-void autonomous(void) {
-    // Toggling the air due to default being open for size purposes.
-    claw.close();
-    claw.open();
-    claw.close();
+void initialize() {
+	inertialSensor.reset(true);
+	arm.set_brake_mode_all(pros::MotorBrake::hold);
+	drivetrain.set_brake_mode_all(pros::MotorBrake::coast);
+	gearDown();
+	while(inertialSensor.is_calibrating()){pros::delay(20);}
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*                              User Control Task                            */
-/*                                                                           */
-/*  This task is used to control your robot during the user control phase of */
-/*  a VEX Competition.                                                       */
-/*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*/
+void disabled() {}
 
-void usercontrol(void) {
-    auto armVelocity = 0;
-    gear = 3;
-    leftDrive.setVelocity(0, percent);
-    rightDrive.setVelocity(0, percent);
-    arm.setVelocity(0, percent);
-    leftDrive.spin(forward);
-    rightDrive.spin(forward);
-    arm.spin(forward);
-    // User control code here, inside the loop
-    while (1) {
+void competition_initialize() {}
 
-        // Movement
-        leftDrive.setVelocity(Controller.Axis3.position() / gear, percent);
-        rightDrive.setVelocity(Controller.Axis2.position() / gear, percent);
+void autonomous() {}
 
-        // Claw
-        Controller.ButtonR2.pressed(openClaw);
-        Controller.ButtonL2.pressed(closeClaw);
-
-        // Arm
-        if (Controller.ButtonL1.pressing()) {
-            armVelocity = -50;
-        } else if (Controller.ButtonR1.pressing()) {
-            armVelocity = 50;
-        } else {
-            armVelocity = 0;
-        }
-
-        arm.setVelocity(armVelocity, percent);
-
-        // Artificial gearshift
-        Controller.ButtonDown.pressed(gearDown);
-        Controller.ButtonUp.pressed(gearUp);
-
-        wait(20, msec); // Sleep the task for a short amount of time to
-                        // prevent wasted resources.
-    }
-}
-
-//
-// Main will set up the competition functions and callbacks.
-//
-int main() {
-    // Set up callbacks for autonomous and driver control periods.
-    Competition.autonomous(autonomous);
-    Competition.drivercontrol(usercontrol);
-
-    // Run the pre-autonomous function.
-    pre_auton();
-
-    // Prevent main from exiting with an infinite loop.
-    while (true) {
-        wait(100, msec);
-    }
+void opcontrol() {
+	while (true) {
+		leftDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / gear);
+		rightDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y) / gear);
+		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) closeClaw();
+		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) openClaw();
+		master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) ? arm.move(-63) :
+		master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) ? arm.move(63) : arm.move(0);
+		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) gearDown();
+		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) gearUp();
+		pros::delay(20);
+	}
 }
