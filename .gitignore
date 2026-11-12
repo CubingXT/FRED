@@ -8,6 +8,8 @@
 
 # PROS
 bin/
+build/
+firmware/
 .vscode/
 .vscode
 .cache/

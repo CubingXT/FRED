@@ -1,4 +1,5 @@
 #include "main.h"
+#include "devices.h"
 #include <cmath>
 
 double inches_to_degrees(double inches) {
