@@ -36,6 +36,7 @@
 
 #include "api.h"
 #include "devices.hpp"
+#include "utils.h"
 /**
  * You should add more #includes here
  */

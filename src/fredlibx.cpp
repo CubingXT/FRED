@@ -8,7 +8,7 @@ double inches_to_degrees(double inches) {
     
     return (inches / circumference) * 360.0 / gear_ratio;
 }
-void drive_straight(double target_inches, int max_speed = 100, int timeout_ms = 3000) {
+void drive_straight(double target_inches, int max_speed, int timeout_ms) {
     leftDrive.tare_position();
     rightDrive.tare_position();
 
