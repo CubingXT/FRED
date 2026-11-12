@@ -5,7 +5,7 @@ void initialize() {
 	arm.set_brake_mode_all(pros::MotorBrake::hold);
 	drivetrain.set_brake_mode_all(pros::MotorBrake::coast);
 	gearDown();
-	while(inertialSensor.is_calibrating()){pros::delay(20);}
+	while(inertialSensor.is_calibrating()){pros::delay(1000);}
 }
 
 void disabled() {}
