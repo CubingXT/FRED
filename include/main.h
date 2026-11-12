@@ -35,8 +35,8 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-#include "devices.hpp"
-#include "utils.hpp"
+#include "devices.h"
+#include "globals.h"
 /**
  * You should add more #includes here
  */

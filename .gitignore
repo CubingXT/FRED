@@ -16,6 +16,7 @@ temp.log
 temp.errors
 *.ini
 .d/
+firmware/
 
 # MacOS bullcrap
 .DS_Store

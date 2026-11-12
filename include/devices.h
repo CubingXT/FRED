@@ -1,5 +1,5 @@
-#ifndef DEVICES_HPP
-#define DEVICES_HPP
+#ifndef DEVICES_H
+#define DEVICES_H
 #include "main.h"
 
 extern pros::Controller master;
