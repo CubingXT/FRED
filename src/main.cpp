@@ -2,6 +2,7 @@
 #include "devices.h"
 
 double gear = 1.5;
+
 void gearDown() {
 	gear = 3;
 	drivetrain.set_current_limit_all(1500);
