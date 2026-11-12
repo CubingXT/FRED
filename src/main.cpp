@@ -1,5 +1,4 @@
 #include "main.h"
-#include "devices.h"
 
 double gear = 1.5;
 void gearDown() {
