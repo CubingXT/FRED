@@ -7,11 +7,8 @@ pros::Imu inertialSensor (10);
 pros::adi::DigitalOut claw('A');
 
 // Arm
-pros::MotorGroup arm (
-	{-14, 16},
-	pros::v5::MotorGears::red,
-	pros::v5::MotorUnits::degrees
-);
+pros::Motor armLeft ( -14);
+pros::Motor armRight(16);
 
 // Drivetrain
 pros::MotorGroup leftDrive (
