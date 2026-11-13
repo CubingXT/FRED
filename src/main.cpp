@@ -4,21 +4,24 @@ double gear = 1.5;
 
 void gearDown() {
 	gear = 3;
-	drivetrain.set_current_limit_all(1500);
+	leftDrive.set_current_limit_all(1500);
+	rightDrive.set_current_limit_all(1500);
 }
 void gearUp() {
 	gear = 1.5;
-	drivetrain.set_current_limit_all(2500);
+	leftDrive.set_current_limit_all(2500);
+	rightDrive.set_current_limit_all(2500);
 }
 
 void openClaw(){claw.set_value(true);}
 void closeClaw(){claw.set_value(false);}
 
 void initialize() {
-	inertialSensor.reset(true);
 	arm.set_brake_mode_all(pros::MotorBrake::hold);
-	drivetrain.set_brake_mode_all(pros::MotorBrake::coast);
+	leftDrive.set_brake_mode_all(pros::MotorBrake::coast);
+	rightDrive.set_brake_mode_all(pros::MotorBrake::coast);
 	gearDown();
+	inertialSensor.reset(true);
 }
 
 void disabled() {}

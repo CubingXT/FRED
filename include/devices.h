@@ -8,6 +8,5 @@ extern pros::adi::DigitalOut claw;
 extern pros::MotorGroup arm;
 extern pros::MotorGroup leftDrive;
 extern pros::MotorGroup rightDrive;
-extern pros::MotorGroup drivetrain;
 
 #endif

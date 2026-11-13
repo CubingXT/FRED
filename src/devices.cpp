@@ -24,8 +24,3 @@ pros::MotorGroup rightDrive (
 	pros::v5::MotorGears::blue,
 	pros::v5::MotorUnits::degrees
 );
-pros::MotorGroup drivetrain (
-    {1, 8, -7, -5},
-    pros::v5::MotorGears::blue,
-    pros::v5::MotorUnits::degrees
-);

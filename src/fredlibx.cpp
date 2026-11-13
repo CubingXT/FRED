@@ -16,8 +16,10 @@ double inches_to_degrees(double inches) {
  * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
  */
 void drive_straight(double target_inches, int max_speed, int timeout_ms) {
-    drivetrain.tare_position_all();
     u_int32_t timestamp = pros::millis();
+    leftDrive.tare_position_all();
+    rightDrive.tare_position_all();
+
     double target_heading = inertialSensor.get_rotation();
     double target_degrees = inches_to_degrees(target_inches);
 
@@ -47,7 +49,8 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
         pros::delay(20);
     }
 
-    drivetrain.brake();
+    leftDrive.brake();
+    rightDrive.brake();
 }
 
 /**
@@ -57,8 +60,10 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
  * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
  */
 void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
-    drivetrain.tare_position_all();
     u_int32_t timestamp = pros::millis();
+    leftDrive.tare_position_all();
+    rightDrive.tare_position_all();
+
     double kP = 1.8;
     double kD = 0.15;
 
@@ -88,5 +93,6 @@ void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
         pros::delay(20);
     }
 
-    drivetrain.brake();
+    leftDrive.brake();
+    rightDrive.brake();
 }
