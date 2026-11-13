@@ -32,7 +32,7 @@ void autonomous() {}
 
 void opcontrol() {
 	while (true) {
-        // Drive
+		// Drive
 		leftDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / gear);
 		rightDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y) / gear);
 
