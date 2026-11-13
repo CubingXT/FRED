@@ -42,7 +42,7 @@ void opcontrol() {
 
         // Arm
 		master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) ? arm.move(-63) :
-		master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) ? arm.move(63) : arm.move(0);
+		master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) ? arm.move(63) : arm.brake();
 
         // changeGear
 		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) gearDown();
