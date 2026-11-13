@@ -80,7 +80,6 @@
                 "version": "4.2.3"
             },
             "liblvgl": {
-                "location": "/Users/lilrollieguy/Library/Application Support/PROS/templates/liblvgl@9.2.0",
                 "metadata": {
                     "origin": "pros-mainline"
                 },
