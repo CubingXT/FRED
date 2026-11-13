@@ -9,7 +9,14 @@ double inches_to_degrees(double inches) {
     return (inches / circumference) * 360.0 / gear_ratio;
 }
 
+/**
+ * drive x inches
+ * @param target_inches the amount of inches to move forward. Negitive numbers will move backwords
+ * @param max_speed the maximum speed in percentage
+ * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
+ */
 void drive_straight(double target_inches, int max_speed, int timeout_ms) {
+    u_int32_t timestamp = pros::millis();
     leftDrive.tare_position_all();
     rightDrive.tare_position_all();
 
@@ -20,9 +27,7 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
     double kP_drive = 0.5;
     double kP_heading = 2.0;
 
-    int elapsed_time = 0;
-
-    while (elapsed_time < timeout_ms) {
+    while (pros::millis() - timestamp < timeout_ms) {
         double left_pos = leftDrive.get_position();
         double right_pos = rightDrive.get_position();
         double current_degrees = (left_pos + right_pos) / 2.0;
@@ -41,15 +46,21 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
         leftDrive.move(forward_power + turn_correction);
         rightDrive.move(forward_power - turn_correction);
 
-        pros::delay(10);
-        elapsed_time += 10;
+        pros::delay(20);
     }
 
     leftDrive.brake();
     rightDrive.brake();
 }
 
+/**
+ * Turn x deg in any direction
+ * @param target_angle Target angle relitive to current
+ * @param max_speed the maximum speed in percentage
+ * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
+ */
 void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
+    u_int32_t timestamp = pros::millis();
     leftDrive.tare_position_all();
     rightDrive.tare_position_all();
 
@@ -57,10 +68,9 @@ void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
     double kD = 0.15;
 
     double prev_error = target_angle - inertialSensor.get_rotation();
-    int elapsed_time = 0;
     int settle_time = 0;
 
-    while (elapsed_time < timeout_ms) {
+    while (pros::millis() - timestamp < timeout_ms) {
         double current_angle = inertialSensor.get_rotation();
         double error = target_angle - current_angle;
 
@@ -80,8 +90,7 @@ void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
         leftDrive.move(turn_power);
         rightDrive.move(-turn_power);
 
-        pros::delay(10);
-        elapsed_time += 10;
+        pros::delay(20);
     }
 
     leftDrive.brake();
