@@ -592,7 +592,10 @@
       }
     },
     "upload_options": {
-      "icon": "pizza"
+      "icon": "pros",
+      "description": "FRED robot",
+      "after": "screen",
+      "slot": 2
     },
     "use_early_access": false
   }
