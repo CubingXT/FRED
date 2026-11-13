@@ -22,7 +22,6 @@ void initialize() {
 	rightDrive.set_brake_mode_all(pros::MotorBrake::coast);
 	gearDown();
 	inertialSensor.reset(true);
-	pros::delay(3000);
 }
 
 void disabled() {}
