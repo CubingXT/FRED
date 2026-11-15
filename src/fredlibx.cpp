@@ -9,12 +9,6 @@ double inches_to_degrees(double inches) {
     return (inches / circumference) * 360.0 / gear_ratio;
 }
 
-/**
- * drive x inches
- * @param target_inches the amount of inches to move forward. Negitive numbers will move backwords
- * @param max_speed the maximum speed in percentage
- * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
- */
 void drive_straight(double target_inches, int max_speed, int timeout_ms) {
     u_int32_t timestamp = pros::millis();
     leftDrive.tare_position_all();
@@ -53,12 +47,6 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
     rightDrive.brake();
 }
 
-/**
- * Turn x deg in any direction
- * @param target_angle Target angle relitive to current
- * @param max_speed the maximum speed in percentage
- * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
- */
 void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
     u_int32_t timestamp = pros::millis();
     leftDrive.tare_position_all();
