@@ -13,13 +13,9 @@ const double gearMultiples[maxGear] = {
 int gearLevel = 0;
 double gear = gearMultiples[gearLevel];
 
-
-
 void gearDown() {
 	gearLevel--;
-	if(gearLevel <= 0) {
-		gearLevel = 0;
-	}
+	if(gearLevel <= 0) gearLevel = 0;
 
 	gear = gearMultiples[gearLevel];
 
@@ -27,9 +23,7 @@ void gearDown() {
 }
 void gearUp() {
 	gearLevel++;
-	if(gearLevel >= maxGear) {
-		gearLevel = maxGear - 1;
-	}
+	if(gearLevel >= maxGear) gearLevel = maxGear - 1;
 
 	gear = gearMultiples[gearLevel];
 
