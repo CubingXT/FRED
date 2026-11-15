@@ -54,7 +54,11 @@ void disabled() {}
 
 void competition_initialize() {}
 
-void autonomous() {}
+void autonomous() {
+	drive_straight(12);
+	turn_to_angle(180);
+	drive_straight(12);
+}
 
 void opcontrol() {
 	while (true) {
