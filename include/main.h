@@ -36,7 +36,6 @@
 
 #include "api.h"
 #include "devices.h"
-#include "globals.h"
 /**
  * You should add more #includes here
  */

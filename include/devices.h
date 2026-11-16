@@ -1,6 +1,5 @@
-#ifndef DEVICES_H
-#define DEVICES_H
-#include "main.h"
+#pragma once
+#include "api.h"
 
 extern pros::Controller master;
 extern pros::Imu inertialSensor;
@@ -9,5 +8,3 @@ extern pros::Motor armLeft;
 extern pros::Motor armRight;
 extern pros::MotorGroup leftDrive;
 extern pros::MotorGroup rightDrive;
-
-#endif

@@ -1,5 +1,5 @@
 #include "main.h"
-#include <math.h>
+#include "fredlibx.h"
 
 void moveClaw(int speed, int time) {
     armLeft.move(speed);
