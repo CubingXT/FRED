@@ -593,7 +593,7 @@
       "icon": "pros",
       "description": "FRED robot",
       "after": "screen",
-      "slot": 3
+      "slot": 2
     },
     "use_early_access": false
   }

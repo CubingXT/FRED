@@ -2,7 +2,7 @@
 
 #define maxGear 4
 #define leftMotorNerf 0.9
-#define rightArmLowerNerf 0.5
+#define rightArmLowerNerf 0.8
 
 const double gearMultiples[maxGear] = {
 	3.0,

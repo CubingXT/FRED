@@ -67,6 +67,8 @@ void initialize(void);
 void disabled(void);
 void competition_initialize(void);
 void opcontrol(void);
+void openClaw(void);
+void closeClaw(void);
 #ifdef __cplusplus
 }
 #endif
