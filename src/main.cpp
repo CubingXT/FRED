@@ -66,6 +66,7 @@ void opcontrol() {
 		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 			armLeft.move(72);
 			// Its synced good enough for raising
+			/* i agree */
 			armRight.move(floor(72 * rightArmLowerNerf));
 		}
 		else {
