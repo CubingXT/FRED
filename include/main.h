@@ -36,7 +36,7 @@
 
 #include "api.h"
 #include "devices.h"
-#include "globals.h"
+#include "namespaces.hpp"
 /**
  * You should add more #includes here
  */
@@ -67,6 +67,8 @@ void initialize(void);
 void disabled(void);
 void competition_initialize(void);
 void opcontrol(void);
+void openClaw(void);
+void closeClaw(void);
 #ifdef __cplusplus
 }
 #endif

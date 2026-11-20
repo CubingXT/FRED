@@ -1,6 +1,8 @@
 #include "main.h"
 #include <cmath>
 
+void brakeDrive() { leftDrive.brake(); rightDrive.brake(); }
+
 double inches_to_degrees(double inches) {
     double wheel_diameter = 3.25;
     double gear_ratio = 1.0;
@@ -9,12 +11,6 @@ double inches_to_degrees(double inches) {
     return (inches / circumference) * 360.0 / gear_ratio;
 }
 
-/**
- * drive x inches
- * @param target_inches the amount of inches to move forward. Negitive numbers will move backwords
- * @param max_speed the maximum speed in percentage
- * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
- */
 void drive_straight(double target_inches, int max_speed, int timeout_ms) {
     u_int32_t timestamp = pros::millis();
     leftDrive.tare_position_all();
@@ -48,17 +44,9 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
 
         pros::delay(20);
     }
-
-    leftDrive.brake();
-    rightDrive.brake();
+    brakeDrive();
 }
 
-/**
- * Turn x deg in any direction
- * @param target_angle Target angle relitive to current
- * @param max_speed the maximum speed in percentage
- * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
- */
 void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
     u_int32_t timestamp = pros::millis();
     leftDrive.tare_position_all();
@@ -92,7 +80,18 @@ void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
 
         pros::delay(20);
     }
+    brakeDrive();
+}
 
-    leftDrive.brake();
-    rightDrive.brake();
+void moveArm(int speed, int time) {
+    armLeft.move(speed);
+    if(std::abs(speed) == speed)
+        armRight.move(speed * 0.7);
+    else   
+        armRight.move(speed);
+
+    pros::delay(time);
+
+    armLeft.brake();
+    armRight.brake();
 }

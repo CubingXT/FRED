@@ -1,54 +1,87 @@
 #include "main.h"
+#include "namespaces.hpp"
 
-double gear = 1.5;
+constexpr pros::MotorBrake HOLD = pros::MotorBrake::hold;
+constexpr pros::MotorBrake COAST = pros::MotorBrake::coast;
+
+// Magic numbers
+const double LEFT_MOTOR_NERF = 0.9;
+const double RIGHT_ARM_LOWER_NERF = 0.8;
+
+const int MAX_GEAR = 4;
+
+const double GEAR_MULTIPLES[MAX_GEAR] = {
+	3.0,
+	2.0,
+	1.5,
+	1.0
+};
+
+int gearLevel = 0;
+double gear = GEAR_MULTIPLES[gearLevel];
 
 void gearDown() {
-	gear = 3;
-	leftDrive.set_current_limit_all(1500);
-	rightDrive.set_current_limit_all(1500);
+	gearLevel--;
+	if(gearLevel <= 0) gearLevel = 0;
+
+	gear = GEAR_MULTIPLES[gearLevel];
+
+	master.set_text(0, 0, "gear: " + std::to_string(gearLevel + 1));
 }
 void gearUp() {
-	gear = 1.5;
-	leftDrive.set_current_limit_all(2500);
-	rightDrive.set_current_limit_all(2500);
+	gearLevel++;
+	if(gearLevel >= MAX_GEAR) gearLevel = MAX_GEAR - 1;
+
+	gear = GEAR_MULTIPLES[gearLevel];
+
+	master.set_text(0, 0, "gear: " + std::to_string(gearLevel + 1));
 }
 
 void openClaw(){claw.set_value(true);}
 void closeClaw(){claw.set_value(false);}
 
 void initialize() {
-	arm.set_brake_mode_all(pros::MotorBrake::hold);
-	leftDrive.set_brake_mode_all(pros::MotorBrake::coast);
-	rightDrive.set_brake_mode_all(pros::MotorBrake::coast);
+	master.clear();
+	pros::delay(50);	// So displays the gear bc controllers update every 50 msec
+	leftDrive.set_brake_mode_all(COAST);
+	rightDrive.set_brake_mode_all(COAST);
+	armLeft.set_brake_mode(HOLD);
+	armRight.set_brake_mode(HOLD);
+	gearLevel = 0;
 	gearDown();
-	inertialSensor.reset(true);
+	inertialSensor.reset(pros::competition::is_connected());
 }
 
 void disabled() {}
 
 void competition_initialize() {}
 
-void autonomous() {}
-
 void opcontrol() {
 	while (true) {
 		// Drive
-		leftDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / gear);
-		rightDrive.move(master.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y) / gear);
+		leftDrive.move(ctrlr::getStick(ctrlr::LS_Y) * LEFT_MOTOR_NERF / gear );
+		rightDrive.move(ctrlr::getStick(ctrlr::RS_Y) / gear);
 
         // Claw
-		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) closeClaw();
-		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) openClaw();
+		if (ctrlr::pressed(ctrlr::L2)) closeClaw();
+		if (ctrlr::pressed(ctrlr::R2)) openClaw();
 
         // Arm
-		master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) ? arm.move(-63) :
-		master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) ? arm.move(63) : arm.move(0);
+		if (ctrlr::pressing(ctrlr::L1)) {
+			armLeft.move(-127);
+			armRight.move(-127);
+		} else if (ctrlr::pressing(ctrlr::R1)) {
+			armLeft.move(72);
+			armRight.move(floor(72 * RIGHT_ARM_LOWER_NERF));
+		} else {
+			armLeft.brake();
+			armRight.brake();
+		}
 
         // changeGear
-		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) gearDown();
-		if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) gearUp();
+		if (ctrlr::pressed(ctrlr::DOWN)) gearDown();
+		if (ctrlr::pressed(ctrlr::UP)) gearUp();
 
 		pros::delay(20);
 	}
 }
-
