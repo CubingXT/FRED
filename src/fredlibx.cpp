@@ -1,6 +1,8 @@
 #include "main.h"
 #include <cmath>
 
+void brakeDrive() { leftDrive.brake(); rightDrive.brake(); }
+
 double inches_to_degrees(double inches) {
     double wheel_diameter = 3.25;
     double gear_ratio = 1.0;
@@ -42,9 +44,7 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
 
         pros::delay(20);
     }
-
-    leftDrive.brake();
-    rightDrive.brake();
+    brakeDrive();
 }
 
 void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
@@ -80,7 +80,5 @@ void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
 
         pros::delay(20);
     }
-
-    leftDrive.brake();
-    rightDrive.brake();
+    brakeDrive();
 }
