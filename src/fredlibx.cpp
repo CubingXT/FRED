@@ -82,3 +82,16 @@ void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
     }
     brakeDrive();
 }
+
+void moveArm(int speed, int time) {
+    armLeft.move(speed);
+    if(std::abs(speed) == speed)
+        armRight.move(speed * 0.7);
+    else   
+        armRight.move(speed);
+
+    pros::delay(time);
+
+    armLeft.brake();
+    armRight.brake();
+}

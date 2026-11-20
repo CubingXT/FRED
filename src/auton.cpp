@@ -1,21 +1,7 @@
 #include "main.h"
 #include "fredlibx.h"
 
-void moveClaw(int speed, int time) {
-    armLeft.move(speed);
-    if(std::abs(speed) == speed)
-        armRight.move(speed * 0.7);
-    else   
-        armRight.move(speed);
-
-    pros::delay(time);
-
-    armLeft.brake();
-    armRight.brake();
-}
-
 void autonomous() {
-	inertialSensor.reset(true);
     while(inertialSensor.is_calibrating()) {
         pros::delay(2);
     }
@@ -26,13 +12,13 @@ void autonomous() {
 	turn_to_angle(-104);
 
     // raise arm first
-    moveClaw(-90, 300);
+    moveArm(-90, 300);
 
     // move to the post
 	drive_straight(14);
 
     // move arm down
-    moveClaw(79, 320);   
+    moveArm(79, 320);   
 
     pros::delay(300);
 
@@ -40,5 +26,5 @@ void autonomous() {
     //openClaw();
 
     // go back up
-    moveClaw(-90, 100);
+    moveArm(-90, 100);
 }
