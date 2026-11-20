@@ -590,10 +590,10 @@
       }
     },
     "upload_options": {
-      "icon": "pros",
+      "icon": "planet",
       "description": "FRED robot",
       "after": "screen",
-      "slot": 2
+      "slot": 1
     },
     "use_early_access": false
   }

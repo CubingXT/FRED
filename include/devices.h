@@ -1,4 +1,6 @@
-#pragma once
+#ifndef DEVICES_H
+#define DEVICES_H
+
 #include "api.h"
 
 extern pros::Controller master;
@@ -8,3 +10,5 @@ extern pros::Motor armLeft;
 extern pros::Motor armRight;
 extern pros::MotorGroup leftDrive;
 extern pros::MotorGroup rightDrive;
+
+#endif

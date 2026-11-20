@@ -34,6 +34,7 @@ void openClaw(){claw.set_value(true);}
 void closeClaw(){claw.set_value(false);}
 
 void initialize() {
+	std::cout << "initialize";
 	master.clear();
 	leftDrive.set_brake_mode_all(pros::MotorBrake::coast);
 	rightDrive.set_brake_mode_all(pros::MotorBrake::coast);
@@ -44,7 +45,7 @@ void initialize() {
 	inertialSensor.reset(pros::competition::is_connected());
 }
 
-void disabled() {}
+void disabled() {std::cout << "disabled";}
 
 void competition_initialize() {}
 
