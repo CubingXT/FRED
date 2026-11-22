@@ -1,21 +1,18 @@
 #include "main.h"
 
+#include <array>
+
 /* Constant expressions for code readability */
 
 constexpr pros::MotorBrake HOLD = pros::MotorBrake::hold;
 constexpr pros::MotorBrake COAST = pros::MotorBrake::coast;
 
-// Magic number for left motor
-const double LEFT_MOTOR_NERF = 0.9;
-
-// Magic number for arm lowering
-const double RIGHT_ARM_LOWER_NERF = 0.8;
-
-// Highest gear in the artificial gearshift
-const int MAX_GEAR = 4;
+// Magic Numbers (nerf means x*nerf to slow down)
+constexpr double LEFT_MOTOR_NERF = 0.9;
+constexpr double RIGHT_ARM_LOWER_NERF = 0.8;
 
 // Array of values for the gearshift
-const double GEAR_MULTIPLES[MAX_GEAR] = {
+constexpr std::array<double, 4> GEAR_MULTIPLES = {
 	3.0,
 	2.0,
 	1.5,
@@ -38,7 +35,7 @@ void gearDown() {
 // Increases the gear
 void gearUp() {
 	gearLevel++;
-	if(gearLevel >= MAX_GEAR) gearLevel = MAX_GEAR - 1;
+	if(gearLevel >= GEAR_MULTIPLES.size()) gearLevel = GEAR_MULTIPLES.size() - 1;
 	gear = GEAR_MULTIPLES[gearLevel];
 
 	// Displays current gear to the user
@@ -50,6 +47,10 @@ void openClaw() { claw.set_value(true); }
 
 // Closes the pneumatic claw
 void closeClaw() { claw.set_value(false); }
+
+// ---
+// called by pros:
+//
 
 void initialize() {
 	master.clear();
