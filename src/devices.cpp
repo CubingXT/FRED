@@ -1,4 +1,4 @@
-#include "main.h"
+#include "api.h" // IWYU pragma: keep
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 

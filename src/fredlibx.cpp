@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main.h" // IWYU pragma: keep
 #include <cmath>
 
 // Stops all motors on both sides of the drivetrain immediately

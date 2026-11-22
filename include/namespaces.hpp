@@ -8,7 +8,7 @@
           for the controller for easy readability.
 */
 
-#include "api.h"
+#include "api.h" // IWYU pragma: keep
 #include "devices.h"
 
 // ALL CONTROLS ARE GONNA BE PLAYSTATION CONTROLS BC I CAN

@@ -1,7 +1,8 @@
 #ifndef DEVICES_H
 #define DEVICES_H
 
-#include "api.h"
+#include "api.h" // IWYU pragma: keep
+
 
 extern pros::Controller master;
 extern pros::Imu inertialSensor;

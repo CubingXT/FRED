@@ -34,9 +34,9 @@
  */
 #define PROS_USE_LITERALS
 
-#include "api.h"
-#include "devices.h"
-#include "namespaces.hpp"
+#include "api.h"          // IWYU pragma: keep
+#include "devices.h"      // IWYU pragma: keep
+#include "namespaces.hpp" // IWYU pragma: keep
 /**
  * You should add more #includes here
  */
