@@ -37,7 +37,7 @@
 #include "api.h" // IWYU pragma: keep
 #include "devices.h" // IWYU pragma: keep
 #include "ctrlr.hpp" // IWYU pragma: keep
-#include "utils.h" // IWYU pragma: keep
+#include "fred.hpp" // IWYU pragma: keep
 /**
  * You should add more #includes here
  */
@@ -76,7 +76,7 @@ void opcontrol(void);
 /**
  * You can add C++-only headers here
  */
-//#include <iostream>
+#include <array> // IWYU pragma: keep
 #endif
 
 #endif  // _PROS_MAIN_H_
