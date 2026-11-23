@@ -1,3 +1,4 @@
+#include "fredlibx.h"
 #include "main.h" // IWYU pragma: keep
 #include <cmath>
 

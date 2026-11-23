@@ -1,14 +1,20 @@
-#include "main.h"
+#include "main.h" 
+
+// Stops motors and holds their current position
+constexpr pros::MotorBrake HOLD = pros::MotorBrake::hold;
+
+// Gradually slows motors to a stop
+constexpr pros::MotorBrake COAST = pros::MotorBrake::coast;
 
 // Reset robot
 void initialize() {
 	master.clear();
 	pros::delay(50);	// So displays the gear bc controllers update every 50 msec
 
-	leftDrive.set_brake_mode_all(fred::COAST);
-	rightDrive.set_brake_mode_all(fred::COAST);
-	armLeft.set_brake_mode(fred::HOLD);
-	armRight.set_brake_mode(fred::HOLD);
+	leftDrive.set_brake_mode_all(COAST);
+	rightDrive.set_brake_mode_all(COAST);
+	armLeft.set_brake_mode(HOLD);
+	armRight.set_brake_mode(HOLD);
 
 	fred::gearDown();
 	inertialSensor.reset(pros::competition::is_connected());
