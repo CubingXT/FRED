@@ -6,7 +6,7 @@
  * @brief A namespace containing all controls and helper functions for the controller for easy readability.
 */
 
-#include "api.h"
+#include "api.h" // IWYU pragma: keep
 #include "devices.h"
 
 // Buttons on controller
