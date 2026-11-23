@@ -7,13 +7,13 @@ constexpr pros::MotorBrake HOLD = pros::MotorBrake::hold;
 constexpr pros::MotorBrake COAST = pros::MotorBrake::coast;
 
 // Magic number for left motor
-const double LEFT_MOTOR_NERF = 0.9;
+constexpr double LEFT_MOTOR_NERF = 0.9;
 
 // Magic number for arm lowering
-const double RIGHT_ARM_LOWER_NERF = 0.8;
+constexpr double RIGHT_ARM_LOWER_NERF = 0.8;
 
 // Array of values for the gearshift
-const std::array<double, 4> GEAR_MULTIPLES = {
+constexpr std::array<double, 4> GEAR_MULTIPLES = {
 	3.0,
 	2.0,
 	1.5,
