@@ -16,7 +16,7 @@ void initialize() {
 	armLeft.set_brake_mode(HOLD);
 	armRight.set_brake_mode(HOLD);
 
-	fred::gearDown();
+	for (int i = 0; i < 4; i++) fred::gearDown();
 	inertialSensor.reset(pros::competition::is_connected());
 }
 
