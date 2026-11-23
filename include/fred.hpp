@@ -1,7 +1,6 @@
 #ifndef FRED_HPP
 #define FRED_HPP
 
-#include "api.h" // IWYU pragma: keep
 #include "devices.h"
 #include "ctrlr.hpp"
 
