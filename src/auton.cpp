@@ -2,9 +2,8 @@
 #include "fredlibx.h"
 
 void autonomous() {
-    while(inertialSensor.is_calibrating()) {
-        pros::delay(2);
-    }
+    while(inertialSensor.is_calibrating()) { pros::delay(2); }
+
     // move forward
 	drive_straight(11.9);
 
