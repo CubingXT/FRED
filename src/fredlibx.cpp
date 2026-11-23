@@ -26,7 +26,7 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
 
     // Lock onto the current heading to maintain a straight line
     double target_heading = inertialSensor.get_rotation();
-    double target_degrees = (target_inches / 3.25 * M_PI) * 360.0;;
+    double target_degrees = (target_inches / (3.25 * M_PI)) * 360.0;;
 
     // Run control loop until the safety timeout expires
     while (pros::millis() - timestamp < timeout_ms) {
@@ -82,7 +82,7 @@ void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
 
         // Check if within 1.5 degrees of target; require it to settle before exiting
         if (std::abs(error) < 1.5) {
-            settle_time += 10;
+            settle_time += 20;
             if (settle_time >= 100) break; // Exit once settled
         } else {
             settle_time = 0; // Reset timer if the robot overshoots or bounces out
