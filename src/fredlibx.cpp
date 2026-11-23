@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main.h" 
 #include <cmath>
 
 // Stops all motors on both sides of the drivetrain immediately
@@ -7,32 +7,20 @@ void brakeDrive() {
     rightDrive.brake(); 
 }
 
-/**
- * Converts a linear travel distance in inches into motor encoder degrees.
- * 
- * @param inches The target distance to travel.
- * @return The equivalent motor rotation in degrees.
- */
-
-double inches_to_degrees(double inches) {
-    double wheel_diameter = 3.25; // Wheel diameter in inches
-    double gear_ratio = 1.0;      // External gear ratio (input / output)
-    double circumference = wheel_diameter * M_PI;
-    
-    // Calculate wheel rotations needed, convert to degrees, and adjust for gearing
-    return (inches / circumference) * 360.0 / gear_ratio;
+void tareDrive() {
+    leftDrive.tare_position_all();
+    rightDrive.tare_position_all();
 }
 
 void drive_straight(double target_inches, int max_speed, int timeout_ms) {
     u_int32_t timestamp = pros::millis();
     
     // Reset motor encoders to 0 before starting
-    leftDrive.tare_position_all();
-    rightDrive.tare_position_all();
+    tareDrive();
 
     // Lock onto the current heading to maintain a straight line
     double target_heading = inertialSensor.get_rotation();
-    double target_degrees = inches_to_degrees(target_inches);
+    double target_degrees = (target_inches / 3.25 * M_PI) * 360.0;;
 
     // Tuning constants (Proportional gains)
     double kP_drive = 0.5;   // Controls forward/backward speed based on remaining distance
@@ -71,8 +59,9 @@ void drive_straight(double target_inches, int max_speed, int timeout_ms) {
 
 void turn_to_angle(double target_angle, int max_speed, int timeout_ms) {
     u_int32_t timestamp = pros::millis();
-    leftDrive.tare_position_all();
-    rightDrive.tare_position_all();
+    
+    // Reset motor encoders to 0 before starting
+    tareDrive();
 
     // PD Tuning constants
     double kP = 1.8;  // Proportional gain: pushes toward target angle
