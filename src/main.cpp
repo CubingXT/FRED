@@ -38,24 +38,49 @@ void gearDown() {
 // Increases the gear
 void gearUp() {
 	gearLevel++;
-	if(gearLevel >= MAX_GEAR) gearLevel = MAX_GEAR - 1;
+	if (gearLevel >= MAX_GEAR) gearLevel = MAX_GEAR - 1;
 	gear = GEAR_MULTIPLES[gearLevel];
 
 	// Displays current gear to the user
 	master.set_text(0, 0, "gear: " + std::to_string(gearLevel + 1));
 }
 
-// Opens the pneumatic claw
-void openClaw() { claw.set_value(true); }
+// Moves wheels on robot based off of controller joysstick positions
+void updateDrive() {
+	leftDrive.move(ctrlr::getStick(ctrlr::LS_Y) * LEFT_MOTOR_NERF / gear );
+	rightDrive.move(ctrlr::getStick(ctrlr::RS_Y) / gear);
+}
 
-// Closes the pneumatic claw
-void closeClaw() { claw.set_value(false); }
+// Opens or closes claw
+void updateClaw() {
+	if (ctrlr::pressed(ctrlr::L2)) closeClaw();
+	if (ctrlr::pressed(ctrlr::R2)) openClaw();
+}
 
+// Controls arm
+void updateArm() {
+	if (ctrlr::pressing(ctrlr::L1)) {
+		armLeft.move(-127);
+		armRight.move(-127);
+	} else if (ctrlr::pressing(ctrlr::R1)) {
+		armLeft.move(72);
+		armRight.move(floor(72 * RIGHT_ARM_LOWER_NERF));
+	} else {
+		armLeft.brake();
+		armRight.brake();
+	}
+}
+
+// Changes gear up or down
+void updateGear() {
+	if (ctrlr::pressed(ctrlr::DOWN)) gearDown();
+	if (ctrlr::pressed(ctrlr::UP)) gearUp();
+}
+
+// Reset robot
 void initialize() {
 	master.clear();
 	pros::delay(50);	// So displays the gear bc controllers update every 50 msec
-
-	/* Sets brake modes for the motors */
 
 	leftDrive.set_brake_mode_all(COAST);
 	rightDrive.set_brake_mode_all(COAST);
@@ -71,38 +96,13 @@ void disabled() {}
 
 void competition_initialize() {}
 
+// User control
 void opcontrol() {
 	while (true) {
-
-		/* Drive */
-
-		leftDrive.move(ctrlr::getStick(ctrlr::LS_Y) * LEFT_MOTOR_NERF / gear );
-		rightDrive.move(ctrlr::getStick(ctrlr::RS_Y) / gear);
-
-        /* Control claw */
-
-		if (ctrlr::pressed(ctrlr::L2)) closeClaw();
-		if (ctrlr::pressed(ctrlr::R2)) openClaw();
-
-        /* Control arm */
-
-		if (ctrlr::pressing(ctrlr::L1)) {
-			armLeft.move(-127);
-			armRight.move(-127);
-		} else if (ctrlr::pressing(ctrlr::R1)) {
-			armLeft.move(72);
-			armRight.move(floor(72 * RIGHT_ARM_LOWER_NERF));
-		} else {
-			armLeft.brake();
-			armRight.brake();
-		}
-
-        /* Control artificial gearshift */
-
-		if (ctrlr::pressed(ctrlr::DOWN)) gearDown();
-		if (ctrlr::pressed(ctrlr::UP)) gearUp();
-
-		// Wait to prevent overloading processor
+		updateDrive();
+		updateClaw();
+		updateArm();
+		updateGear();
 		pros::delay(20);
 	}
 }
