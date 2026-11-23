@@ -8,7 +8,7 @@
  * @param timeout_ms the timeout for how long. setting to -1 is eq to 0 not inf
  */
 
-void drive_straight(double target_inches, int max_speed = 50, int timeout_ms = 3000);
+void drive_straight(double target_inches, int max_speed = 25, int timeout_ms = 3000);
 
 /**
  * Turn x deg in any direction
