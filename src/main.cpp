@@ -1,4 +1,5 @@
 #include "main.h"
+#include <array>
 
 /* Constant expressions for code readability */
 
@@ -11,11 +12,8 @@ const double LEFT_MOTOR_NERF = 0.9;
 // Magic number for arm lowering
 const double RIGHT_ARM_LOWER_NERF = 0.8;
 
-// Highest gear in the artificial gearshift
-const int MAX_GEAR = 4;
-
 // Array of values for the gearshift
-const double GEAR_MULTIPLES[MAX_GEAR] = {
+const std::array<double, 4> GEAR_MULTIPLES = {
 	3.0,
 	2.0,
 	1.5,
@@ -38,7 +36,7 @@ void gearDown() {
 // Increases the gear
 void gearUp() {
 	gearLevel++;
-	if (gearLevel >= MAX_GEAR) gearLevel = MAX_GEAR - 1;
+	if (gearLevel >= 4) gearLevel = 3;
 	gear = GEAR_MULTIPLES[gearLevel];
 
 	// Displays current gear to the user
