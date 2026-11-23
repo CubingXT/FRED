@@ -24,7 +24,7 @@
  * E_CONTROLLER_MASTER is pedantically correct within the PROS styleguide, but
  * not convenient for most student programmers.
  */
-#define PROS_USE_SIMPLE_NAMES
+//#define PROS_USE_SIMPLE_NAMES
 
 /**
  * If defined, C++ literals will be available for use. All literals are in the
@@ -34,9 +34,10 @@
  */
 #define PROS_USE_LITERALS
 
-#include "api.h"
-#include "devices.h"
-#include "namespaces.hpp"
+#include "api.h" // IWYU pragma: keep
+#include "devices.h" // IWYU pragma: keep
+#include "ctrlr.hpp" // IWYU pragma: keep
+#include "utils.h" // IWYU pragma: keep
 /**
  * You should add more #includes here
  */
@@ -67,8 +68,6 @@ void initialize(void);
 void disabled(void);
 void competition_initialize(void);
 void opcontrol(void);
-void openClaw(void);
-void closeClaw(void);
 #ifdef __cplusplus
 }
 #endif
