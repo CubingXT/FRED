@@ -1,6 +1,4 @@
 #include "main.h" // IWYU pragma: keep
-#include <array>
-#include <string>
 
 // Magic number for left motor
 constexpr double LEFT_MOTOR_NERF = 0.9;
@@ -22,11 +20,11 @@ double gear = GEAR_MULTIPLES[gearLevel];
 // Decreases the gear
 void fred::gearDown() {
     gearLevel--;
-    if(gearLevel <= 0) gearLevel = 0;
+    if (gearLevel <= 0) gearLevel = 0;
     gear = GEAR_MULTIPLES[gearLevel];
 
     // Displays current gear to the user
-    master.set_text(0, 0, "gear: " + std::to_string(gearLevel + 1));
+    ctrlr::print(0, 0, "gear: " + std::to_string(gearLevel + 1));
 }
 
 // Increases the gear
@@ -36,7 +34,7 @@ void fred::gearUp() {
     gear = GEAR_MULTIPLES[gearLevel];
 
     // Displays current gear to the user
-    master.set_text(0, 0, "gear: " + std::to_string(gearLevel + 1));
+    ctrlr::print(0, 0, "gear: " + std::to_string(gearLevel + 1));
 }
 
 // Moves wheels on robot based off of controller joysstick positions
@@ -47,8 +45,8 @@ void fred::updateDrive() {
 
 // Opens or closes claw
 void fred::updateClaw() {
-    if (ctrlr::pressed(ctrlr::L2)) closeClaw();
-    if (ctrlr::pressed(ctrlr::R2)) openClaw();
+    ctrlr::pressed(ctrlr::L2, fred::closeClaw);
+    ctrlr::pressed(ctrlr::R2, fred::openClaw);
 }
 
 // Controls arm
@@ -67,6 +65,6 @@ void fred::updateArm() {
 
 // Changes gear up or down
 void fred::updateGear() {
-    if (ctrlr::pressed(ctrlr::DOWN)) gearDown();
-    if (ctrlr::pressed(ctrlr::UP)) gearUp();
+    ctrlr::pressed(ctrlr::DOWN, fred::gearDown);
+    ctrlr::pressed(ctrlr::UP, fred::gearUp);
 }
