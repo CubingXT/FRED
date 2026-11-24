@@ -45,11 +45,12 @@ namespace ctrlr {
 
     // Helper functions
 
-    inline void pressed(Digital button, std::function<void()> callback) { if (master.get_digital_new_press(button)) callback(); } // Runs callback when detects that button was pressed
+    // Runs callback when detects that button was pressed
+    inline void pressed(Digital button, std::function<void()> callback) { if (master.get_digital_new_press(button)) callback(); }
     inline bool pressing(Digital button) { return master.get_digital(button); } // Returns true if button is currently pressing
     inline int getStick(Analog axis) { return master.get_analog(axis); } // Check joysick value
     inline int print(std::uint8_t line, std::uint8_t col, const std::string &str) { return master.set_text(line, col, str); } // Prints to controller screen
-    inline int clear() { return master.clear(); }
+    inline int clear() { return master.clear(); } // Clears controller screen
 }
 
 #endif
