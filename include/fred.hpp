@@ -9,7 +9,7 @@
  */
 
 namespace fred {
-    
+
     // Opens the pneumatic claw
     inline void openClaw() { claw.set_value(true); }
 
@@ -22,7 +22,6 @@ namespace fred {
     void updateClaw();
     void updateArm();
     void updateGear();
-
 }
 
 #endif

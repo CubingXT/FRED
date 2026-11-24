@@ -1,11 +1,11 @@
 #include "main.h"
-#include "fredlibx.h"
 
 void autonomous() {
+    for (int i = 0; i < 4; i++) fred::gearDown();
     while(inertialSensor.is_calibrating()) { pros::delay(2); }
 
     // move forward
-	drive_straight(11.9);
+	drive_straight(12);
 
     // turn
 	turn_to_angle(-104);
@@ -14,7 +14,7 @@ void autonomous() {
     moveArm(-90, 300);
 
     // move to the post
-	drive_straight(14);
+	drive_straight(20, 50);
 
     // move arm down
     moveArm(79, 320);   
@@ -22,7 +22,7 @@ void autonomous() {
     pros::delay(300);
 
     // try to open claw
-    //openClaw();
+    //fred::openClaw();
 
     // go back up
     moveArm(-90, 100);

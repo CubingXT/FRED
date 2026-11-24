@@ -38,6 +38,7 @@
 #include "devices.h" // IWYU pragma: keep
 #include "ctrlr.hpp" // IWYU pragma: keep
 #include "fred.hpp" // IWYU pragma: keep
+#include "fredlibx.h" // IWYU pragma: keep
 /**
  * You should add more #includes here
  */
@@ -73,9 +74,9 @@ void opcontrol(void);
 #endif
 
 #ifdef __cplusplus
-/**
- * You can add C++-only headers here
- */
+#include <array> // IWYU pragma: keep
+#include <string> // IWYU pragma: keep
+#include <cmath> // IWYU pragma: keep
 #endif
 
 #endif  // _PROS_MAIN_H_
