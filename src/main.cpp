@@ -1,11 +1,5 @@
 #include "main.h" 
 
-// Stops motors and holds their current position
-constexpr pros::MotorBrake HOLD = pros::MotorBrake::hold;
-
-// Gradually slows motors to a stop
-constexpr pros::MotorBrake COAST = pros::MotorBrake::coast;
-
 // Reset robot
 void initialize() {
 	ctrlr::clear();
