@@ -26,4 +26,5 @@ void turn_to_angle(double target_degrees, int max_speed = 50, int timeout_ms = 2
  */
 
 void moveArm(int speed, int time);
+
 #endif
