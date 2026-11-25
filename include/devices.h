@@ -4,17 +4,17 @@
 #include "api.h" // IWYU pragma: keep
 
 // Stops motors and holds their current position
-constexpr pros::MotorBrake HOLD = pros::MotorBrake::hold;
+constexpr pros::v5::MotorBrake HOLD = pros::v5::MotorBrake::hold;
 
 // Gradually slows motors to a stop
-constexpr pros::MotorBrake COAST = pros::MotorBrake::coast;
+constexpr pros::v5::MotorBrake COAST = pros::v5::MotorBrake::coast;
 
-extern pros::Controller master;
-extern pros::Imu inertialSensor;
+extern pros::v5::Controller master;
+extern pros::v5::Imu inertialSensor;
 extern pros::adi::DigitalOut claw;
-extern pros::Motor armLeft;
-extern pros::Motor armRight;
-extern pros::MotorGroup leftDrive;
-extern pros::MotorGroup rightDrive;
+extern pros::v5::Motor armLeft;
+extern pros::v5::Motor armRight;
+extern pros::v5::MotorGroup leftDrive;
+extern pros::v5::MotorGroup rightDrive;
 
 #endif
